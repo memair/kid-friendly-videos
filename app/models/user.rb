@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  before_destroy :revoke_token
+
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :omniauthable, omniauth_providers: [:memair]
@@ -20,5 +22,11 @@ class User < ApplicationRecord
     user.save
     user
   end
-
+  
+  private
+    def revoke_token
+      user = Memair.new(self.memair_access_token)
+      query = 'mutation {RevokeAccessToken{revoked}}'
+      user.query(query)
+    end
 end
