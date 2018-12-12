@@ -1,0 +1,21 @@
+<div class="center jumbotron">
+  <center>
+  <div class="alert alert-warning">
+    🚧 This app is under development 🚧
+  </div>
+  <h1>Autism Video Recommender</h1>
+  <img src="/autism_video_recommender.jpg" width="25%">
+  <h2>Creates safe recommended videos for viewing in Memair</h2>
+  <% flash.each do |key, value| %>
+    <div class="<%= flash_class(key) %>">
+      <%= value %>
+    </div>
+  <% end %>
+  <% if user_signed_in? %>
+    <h3>View your latest recommendations in <a href="https://memair.com/recommendations">Memair</a></h3>
+    <%= button_to "Uninstall this app", registration_path(current_user), data: { confirm: 'Autism Video Recommender will no longer generate recommendations in Memair.', title: 'Are you sure you?' }, method: :delete, class: "btn btn-lg btn-danger" %>
+  <% else %>
+    <%= button_to "Connect with Memair", user_memair_omniauth_authorize_path, id: "sign_in", class: "btn btn-lg btn-primary" %>
+  <% end %>
+  </center>
+</div>
