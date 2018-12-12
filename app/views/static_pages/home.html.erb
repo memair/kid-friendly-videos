@@ -16,11 +16,12 @@
     <%= button_to "Uninstall this app", registration_path(current_user), data: { confirm: 'Autism Video Recommender will no longer generate recommendations in Memair.', title: 'Are you sure you?' }, method: :delete, class: "btn btn-lg btn-danger" %>
   <% else %>
     <%= button_to "Connect with Memair", user_memair_omniauth_authorize_path, id: "sign_in", class: "btn btn-lg btn-primary" %>
-    <script>
-      if(window.location.hash == '#install') {
-        document.getElementById('sign_in').click()
-      }
-    </script>
   <% end %>
   </center>
 </div>
+
+<script>
+  if(window.location.hash == '#install') {
+    document.getElementById('sign_in').click()
+  }
+</script>
