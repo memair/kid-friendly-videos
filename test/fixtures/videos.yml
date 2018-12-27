@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  yt_id: MyString
+  published_at: 2018-12-27 11:17:09
+  description: MyString
+  tags: 
+  channel: one
+
+two:
+  yt_id: MyString
+  published_at: 2018-12-27 11:17:09
+  description: MyString
+  tags: 
+  channel: two

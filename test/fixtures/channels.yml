@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  yt_id: MyString
+  description: MyString
+  last_extracted_at: 2018-12-27 11:10:31
+
+two:
+  yt_id: MyString
+  description: MyString
+  last_extracted_at: 2018-12-27 11:10:31
