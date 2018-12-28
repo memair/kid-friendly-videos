@@ -24,6 +24,8 @@ gem 'omniauth-memair',        '0.0.3'
 gem 'memair', '~> 0.0.28'
 gem 'yt',     '~> 0.28.0'
 
+gem 'gutentag', '~> 2.4'
+
 group :development, :test do
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'pry'

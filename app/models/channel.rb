@@ -1,4 +1,6 @@
 class Channel < ApplicationRecord
+  Gutentag::ActiveRecord.call self
+
   before_save :set_details
   has_many :videos, dependent: :delete_all
 
