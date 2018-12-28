@@ -1,3 +1,5 @@
+
+
 class User < ApplicationRecord
   before_destroy :revoke_token
 

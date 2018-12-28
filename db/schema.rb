@@ -68,7 +68,9 @@ ActiveRecord::Schema.define(version: 2018_12_28_164416) do
   create_table "videos", force: :cascade do |t|
     t.string "yt_id", null: false
     t.datetime "published_at"
+    t.string "title"
     t.string "description"
+    t.integer "duration"
     t.jsonb "tags"
     t.bigint "channel_id"
     t.datetime "created_at", null: false
