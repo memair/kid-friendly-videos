@@ -5,9 +5,6 @@ namespace :memair do
   desc "Make new recommendations"
   task :make_recommendations => :environment do
     puts "started at #{DateTime.now}"
-    user = User.first
-    user.last_recommended_at = nil
-    user.save
     user = User.where('last_recommended_at IS NULL OR last_recommended_at < ?', 24.hours.ago).order('last_recommended_at ASC NULLS FIRST').first
     if user
       puts "recommending for #{user.email}"
