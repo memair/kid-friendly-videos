@@ -13,7 +13,7 @@ namespace :memair do
       videos = Video.order("RANDOM()").limit(10)
       puts "#{videos.count} videos collected"
       videos.each do |video|
-        recommendations << Recommendation.new(video: video, priority: 50, expires_at: 'tomorrow')
+        recommendations << Recommendation.new(video: video, priority: 50, expires_at: DateTime.now + 24.hours)
       end
       mutation = generate_recommendation_mutation(recommendations)
       response = Memair.new(user.memair_access_token).query(mutation)
