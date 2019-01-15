@@ -6,5 +6,7 @@ Rails.application.routes.draw do
     get "/auth/:action/callback", controller: "authentications", constraints: { action: /memair/ }
   end
 
+  resources :users
+
   root 'static_pages#home'
 end

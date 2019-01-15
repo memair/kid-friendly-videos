@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_28_164416) do
+ActiveRecord::Schema.define(version: 2019_01_15_204642) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -61,6 +61,9 @@ ActiveRecord::Schema.define(version: 2018_12_28_164416) do
     t.datetime "updated_at", null: false
     t.string "memair_access_token"
     t.datetime "last_recommended_at"
+    t.integer "functioning_age"
+    t.integer "daily_watch_time"
+    t.jsonb "interests", default: []
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
