@@ -1,6 +1,11 @@
 class Channel < ApplicationRecord
   Gutentag::ActiveRecord.call self
 
+  validates :yt_id, uniqueness: true
+  validates_numericality_of :min_age, greater_than_or_equal_to: 0, less_than_or_equal_to: 100, message: 'must be between 0 & 100'
+  validates_numericality_of :max_age, :greater_than => :min_age, message: 'must be greater than min age'
+  validates_numericality_of :max_age, greater_than_or_equal_to: 0, less_than_or_equal_to: 100, message: 'must be between 0 & 100'
+
   before_save :set_details
   has_many :videos, dependent: :delete_all
 
