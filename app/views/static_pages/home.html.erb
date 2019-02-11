@@ -1,13 +1,10 @@
 <div class="center jumbotron">
   <center>
-  <div class="alert alert-warning">
-    🚧 This app is under development 🚧
-  </div>
   <h1>Autism Video Recommender</h1>
   <img src="/autism_video_recommender.jpg" width=<%= user_signed_in? ? "15%" : "25%" %>>
   <% unless user_signed_in? %><h2>Creates safe recommended videos for viewing in Memair</h2><% end %>
   <% if user_signed_in? && current_user.setup? %>
-    <h3>View your latest recommendations in <a href="https://memair.com/recommendations">Memair</a></h3>
+    <h3>View your latest recommendations in the <a href="https://memair.com/player">Memair Player</a></h3>
   <% end %>
 
   <% flash.each do |key, value| %>
