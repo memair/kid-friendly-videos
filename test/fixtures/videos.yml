@@ -1,15 +1,62 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  yt_id: MyString
-  published_at: 2018-12-27 11:17:09
-  description: MyString
+cat_video_1:
+  yt_id: 'Meow_Meow_1'
+  title: 'Cat Video'
+  published_at: 2019-01-01
+  description: 'An awesome video about kitties'
   tags: 
-  channel: one
+  channel: young_child_channel
+  duration: 120
 
-two:
-  yt_id: MyString
-  published_at: 2018-12-27 11:17:09
-  description: MyString
+cat_video_2:
+  yt_id: 'Meow_Meow_2'
+  title: 'Another Cat Video'
+  published_at: 2019-01-01
+  description: 'Even more awesome video about kitties'
   tags: 
-  channel: two
+  channel: young_child_channel
+  duration: 120
+
+cat_video_3:
+  yt_id: 'Meow_Meow_3'
+  title: 'Super Cat Video'
+  published_at: 2019-01-01
+  description: 'wow much kitties'
+  tags: 
+  channel: young_child_channel
+  duration: 120
+
+cat_video_4:
+  yt_id: 'Meow_Meow_4'
+  title: 'Awesome Cat Video'
+  published_at: 2019-01-01
+  description: 'Awesome kitties'
+  tags: 
+  channel: young_child_channel
+  duration: 120
+
+dog_video_1:
+  yt_id: 'woof_woof_1'
+  title: 'Dog Video'
+  published_at: 2019-01-01
+  description: 'An awesome video about doggies'
+  tags: 
+  channel: older_child_channel
+  duration: 240
+
+dog_video_2:
+  yt_id: 'woof_woof_2'
+  title: 'Dog Video'
+  published_at: 2019-01-01
+  description: 'An even more awesome video about doggies'
+  tags: 
+  channel: older_child_channel
+  duration: 240
+
+dog_video_3:
+  yt_id: 'woof_woof_3'
+  title: 'Dog Video'
+  published_at: 2019-01-01
+  description: 'Another awesome video about doggies'
+  tags: 
+  channel: older_child_channel
+  duration: 240

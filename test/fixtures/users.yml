@@ -1,11 +1,15 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+young_child:
+  email: 'young_child@gmail.com'
+  encrypted_password: <%= User.new.send(:password_digest, 'password') %>
+  interests: ['animals']
+  memair_access_token: 1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF
+  functioning_age: 4
+  daily_watch_time: 300
 
-# This model initially had no columns defined. If you add columns to the
-# model remove the '{}' from the fixture names and add the columns immediately
-# below each fixture, per the syntax in the comments below
-#
-one: {}
-# column: value
-#
-two: {}
-# column: value
+older_child:
+  email: 'older_child@gmail.com'
+  encrypted_password: <%= User.new.send(:password_digest, 'password') %>
+  interests: ['animals']
+  memair_access_token: FEDCBA0987654321FEDCBA0987654321FEDCBA0987654321FEDCBA0987654321
+  functioning_age: 12
+  daily_watch_time: 600

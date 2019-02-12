@@ -22,7 +22,7 @@ gem 'devise',                 '~> 4.5'
 gem 'omniauth-memair',        '0.0.3'
 
 gem 'memair', '~> 0.0.28'
-gem 'yt',     '~> 0.28.0'
+gem 'yt',     '~> 0.32.2'
 
 gem 'gutentag', '~> 2.4'
 
@@ -42,6 +42,7 @@ group :test do
   gem 'capybara', '>= 2.15'
   gem 'selenium-webdriver'
   gem 'chromedriver-helper'
+  gem 'mocha'
 end
 
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]

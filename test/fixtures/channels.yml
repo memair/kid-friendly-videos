@@ -1,11 +1,15 @@
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+young_child_channel:
+  yt_id: 'UCJkWoS4RsldA1coEIot5yDA'
+  title: 'Cats'
+  description: 'All about cats'
+  last_extracted_at: 2019-01-01
+  min_age: 0
+  max_age: 7
 
-one:
-  yt_id: MyString
-  description: MyString
-  last_extracted_at: 2018-12-27 11:10:31
-
-two:
-  yt_id: MyString
-  description: MyString
-  last_extracted_at: 2018-12-27 11:10:31
+older_child_channel:
+  yt_id: 'UCJkWoS4RsldA1coEIot5yDB'
+  title: 'Dogs'
+  description: 'All about dogs'
+  last_extracted_at: 2019-01-01
+  min_age: 5
+  max_age: 15
