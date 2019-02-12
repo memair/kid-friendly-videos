@@ -7,6 +7,12 @@ class User < ApplicationRecord
 
   INTERESTS = %w(trains songs minecraft animals history science)
 
+  ADMINS = %w( greg@gho.st )
+
+  def admin
+    ADMINS.include? self.email
+  end
+
   def self.from_memair_omniauth(omniauth_info)
     data        = omniauth_info.info
     credentials = omniauth_info.credentials

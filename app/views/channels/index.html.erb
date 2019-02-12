@@ -1,0 +1,14 @@
+<h1>Channels</h1>
+
+<% @channels.each do |channel| %>
+  <p>
+  <h3><%= channel.title %></h3>
+  <h6><%= channel.description %></h6>
+  min age: <%= channel.min_age %><br>
+  max age: <%= channel.max_age %><br>
+  videos: <%= channel.videos.count %><br>
+  last extracted at: <%= channel.last_extracted_at %><br>
+  <a href="https://www.youtube.com/channel/<%= channel.yt_id %>" target="_blank">link</a><br>
+
+  </p>
+<% end %>
