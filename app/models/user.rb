@@ -6,7 +6,6 @@ class User < ApplicationRecord
          :omniauthable, omniauth_providers: [:memair]
 
   INTERESTS = %w(trains songs minecraft animals history science)
-
   ADMINS = %w( greg@gho.st )
 
   def admin
