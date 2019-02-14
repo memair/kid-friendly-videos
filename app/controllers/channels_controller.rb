@@ -9,7 +9,8 @@ class ChannelsController < ApplicationController
   end
 
   def create
-    if @channel = Channel.create(channel_params)
+    @channel = Channel.create(channel_params)
+    if @channel.persisted?
       flash[:success] = "updated #{@channel.title}"
     else
       flash[:error] = @channel.errors.full_messages
