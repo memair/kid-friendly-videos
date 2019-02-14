@@ -52,7 +52,8 @@ class Channel < ApplicationRecord
     def get_yt_id
       if self.channel_url
         response = HTTParty.get(self.channel_url, timeout: 180)
-        self.yt_id = /yt.setConfig\('CHANNEL_ID', "(([a-z]|[A-Z]|\d|-|_){24})"\);/.match(response.body)[1]
+        matches = /yt.setConfig\('CHANNEL_ID', "(([a-z]|[A-Z]|\d|-|_){24})"\);/.match(response.body)
+        self.yt_id = matches[1] unless matches.nil?
       end
     end
 end
