@@ -5,7 +5,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable,
          :omniauthable, omniauth_providers: [:memair]
 
-  INTERESTS = %w(trains songs minecraft animals history science reading)
+  INTERESTS = %w(trains songs minecraft animals history science reading puppets)
   ADMINS = %w( greg@gho.st )
 
   def admin
