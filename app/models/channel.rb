@@ -55,5 +55,6 @@ class Channel < ApplicationRecord
         matches = /yt.setConfig\('CHANNEL_ID', "(([a-z]|[A-Z]|\d|-|_){24})"\);/.match(response.body)
         self.yt_id = matches[1] unless matches.nil?
       end
+      errors.add(:yt_id, "Please provide correct url or yt_id") unless self.yt_id
     end
 end
