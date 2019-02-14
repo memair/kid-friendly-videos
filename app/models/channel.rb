@@ -12,7 +12,7 @@ class Channel < ApplicationRecord
   def get_videos
     yt_channel.videos.each do |yt_video|
       begin
-        if yt_video.length.to_i > 0
+        if yt_video.duration.to_i > 0
           self.videos.where(yt_id: yt_video.id).first_or_create do |video|
             video.yt_id        = yt_video.id
             video.title        = yt_video.title
