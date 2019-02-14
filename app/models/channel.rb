@@ -6,7 +6,7 @@ class Channel < ApplicationRecord
 
   attr_accessor :channel_url
 
-  before_save :get_yt_id
+  before_validation :get_yt_id
   before_save :set_details_if_nil
 
   has_many :videos, dependent: :delete_all
