@@ -28,13 +28,22 @@ class Channel < ApplicationRecord
     end
   end
 
+  def update_details
+    self.update_attributes(
+      title: yt_channel.title,
+      description: yt_channel.description,
+      thumbnail_url: yt_channel.thumbnail_url
+    )
+  end
+
   private
+    def yt_channel
+      @yt_channel = @yt_channel || (Yt::Channel.new id: self.yt_id)
+    end
+
     def set_details_if_nil
       self.title = self.title || yt_channel.title
       self.description = self.description || yt_channel.description
-    end
-
-    def yt_channel
-      Yt::Channel.new id: self.yt_id
+      self.thumbnail_url = self.thumbnail_url || yt_channel.thumbnail_url
     end
 end

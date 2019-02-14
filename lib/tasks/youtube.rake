@@ -3,10 +3,11 @@ namespace :youtube do
   task get_videos: :environment do
     puts "started at #{DateTime.now}"
     channel = Channel.order('last_extracted_at ASC NULLS FIRST').first
-    puts "updating #{channel.title}"
+    puts "updating details for #{channel.title}"
+    channel.update_details
+    puts "getting videos for #{channel.title}"
     channel.get_videos
-    channel.last_extracted_at = DateTime.now
-    channel.save
+    channel.update_attributes(last_extracted_at: DateTime.now)
     puts "finished at #{DateTime.now}"
   end
 
