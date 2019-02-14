@@ -13,3 +13,11 @@ older_child:
   memair_access_token: FEDCBA0987654321FEDCBA0987654321FEDCBA0987654321FEDCBA0987654321
   functioning_age: 12
   daily_watch_time: 600
+
+admin:
+  email: <%= User::ADMINS.first %>
+  encrypted_password: <%= User.new.send(:password_digest, 'password') %>
+  interests: []
+  memair_access_token: <%= '0' * 64 %>
+  functioning_age: 35
+  daily_watch_time: 600

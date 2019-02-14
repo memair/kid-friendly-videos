@@ -22,6 +22,6 @@ class UsersController < ApplicationController
     end
 
     def user_params
-      params.require(:user).permit(:functioning_age, :daily_watch_time, interests: [])
+      params.require(:user).permit(:functioning_age, :daily_watch_time, tags: [])
     end 
 end

@@ -1,12 +1,14 @@
 class Channel < ApplicationRecord
-  Gutentag::ActiveRecord.call self
-
   validates :yt_id, uniqueness: true
   validates_numericality_of :min_age, greater_than_or_equal_to: 0, less_than_or_equal_to: 100, message: 'must be between 0 & 100'
   validates_numericality_of :max_age, :greater_than => :min_age, message: 'must be greater than min age'
   validates_numericality_of :max_age, greater_than_or_equal_to: 0, less_than_or_equal_to: 100, message: 'must be between 0 & 100'
 
+  attr_accessor :channel_url
+
+  before_save :get_yt_id
   before_save :set_details_if_nil
+
   has_many :videos, dependent: :delete_all
 
   def get_videos
@@ -45,5 +47,12 @@ class Channel < ApplicationRecord
       self.title = self.title || yt_channel.title
       self.description = self.description || yt_channel.description
       self.thumbnail_url = self.thumbnail_url || yt_channel.thumbnail_url
+    end
+
+    def get_yt_id
+      if self.channel_url
+        response = HTTParty.get(self.channel_url, timeout: 180)
+        self.yt_id = /yt.setConfig\('CHANNEL_ID', "(([a-z]|[A-Z]|\d|-|_){24})"\);/.match(response.body)[1]
+      end
     end
 end
