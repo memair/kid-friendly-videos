@@ -5,7 +5,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable,
          :omniauthable, omniauth_providers: [:memair]
 
-  INTERESTS = %w(trains songs minecraft animals history science reading puppets movement crafts cartoons riddles food math stories education )
+  INTERESTS = %w(trains songs minecraft animals history science reading puppets movement crafts cartoons riddles food math stories education blog )
   ADMINS = %w( greg@gho.st )
 
   def admin
@@ -30,7 +30,7 @@ class User < ApplicationRecord
     user
   end
 
-  def get_recommendations
+  def get_recommendations(expires_in=nil)
     previous_recommended_video_ids = Video.where(yt_id: previous_recommended).ids
 
     sql = """
@@ -49,20 +49,20 @@ class User < ApplicationRecord
       recommendable_videos AS (
         SELECT
           v.id,
-          (NOW() + INTERVAL '48' HOUR)::text AS expires_at,
+          (NOW() + INTERVAL '#{ expires_in || 48 * 60 }' MINUTE)::text AS expires_at,
           SUM(v.duration) OVER (ORDER BY RANDOM()) AS cumulative_duration
         FROM
           videos v
           JOIN recommendable_channels c ON v.channel_id = c.id
         WHERE
-          v.duration < #{self.daily_watch_time * 60 / 2}
+          v.duration < #{ expires_in.nil? ? self.daily_watch_time * 60 / 2 : expires_in * 60 }
           AND v.duration > 0
           #{'AND v.id NOT IN (' + previous_recommended_video_ids.join(",") + ')' unless previous_recommended_video_ids.empty?}
         ORDER BY RANDOM()
         LIMIT 50)
       SELECT *
       FROM recommendable_videos
-      WHERE cumulative_duration <= #{self.daily_watch_time * 60}
+      WHERE cumulative_duration <= #{ expires_in.nil? ? self.daily_watch_time * 60 : expires_in * 60 }
     """
 
     results = ActiveRecord::Base.connection.execute(sql).to_a

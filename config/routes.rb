@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   end
 
   resources :users
+  post 'watch_time' => 'users#watch_time'
 
   root 'static_pages#home'
   resources :channels
