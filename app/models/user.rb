@@ -5,7 +5,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable,
          :omniauthable, omniauth_providers: [:memair]
 
-  INTERESTS = %w(trains songs minecraft animals history science reading puppets movement crafts cartoons riddles food)
+  INTERESTS = %w(trains songs minecraft animals history science reading puppets movement crafts cartoons riddles food math stories education )
   ADMINS = %w( greg@gho.st )
 
   def admin
@@ -35,29 +35,45 @@ class User < ApplicationRecord
 
     sql = """
       WITH
+      recommendable_channels AS (
+        SELECT
+          c.id
+        FROM
+          users u
+          JOIN channels c ON 
+            ((u.interests ?| TRANSLATE(c.tags::text, '[]','{}')::TEXT[]) OR u.interests = '[]'::jsonb)
+            AND u.functioning_age BETWEEN c.min_age AND c.max_age
+        WHERE u.id = #{self.id}
+        GROUP BY c.id
+      ),
       recommendable_videos AS (
         SELECT
           v.id,
-          50 AS priority,
-          '#{DateTime.now + 48.hours}'::text AS expires_at,
+          (NOW() + INTERVAL '48' HOUR)::text AS expires_at,
           SUM(v.duration) OVER (ORDER BY RANDOM()) AS cumulative_duration
         FROM
           videos v
-          JOIN channels c ON v.channel_id = c.id
+          JOIN recommendable_channels c ON v.channel_id = c.id
         WHERE
-          v.duration < #{self.daily_watch_time / 2}
+          v.duration < #{self.daily_watch_time * 60 / 2}
           AND v.duration > 0
-          AND #{self.functioning_age} BETWEEN c.min_age AND c.max_age
           #{'AND v.id NOT IN (' + previous_recommended_video_ids.join(",") + ')' unless previous_recommended_video_ids.empty?}
         ORDER BY RANDOM()
         LIMIT 50)
       SELECT *
       FROM recommendable_videos
-      WHERE cumulative_duration <= #{self.daily_watch_time}
+      WHERE cumulative_duration <= #{self.daily_watch_time * 60}
     """
 
     results = ActiveRecord::Base.connection.execute(sql).to_a
-    recommendations = results.map {|r| Recommendation.new(video: Video.find(r['id']), priority: r['priority'], expires_at: r['expires_at'])}
+    videos = Video.where(id: results.map {|r| r['id']}) # prevent n + 1 query
+    expires_at = results.map {|r| r['expires_at']}
+
+    recommendations = []
+    results.count.times do |i|
+      recommendations.append(Recommendation.new(video: videos[i], priority: 50, expires_at: expires_at[i]))
+    end
+    recommendations
   end
 
   def setup?

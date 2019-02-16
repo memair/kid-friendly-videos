@@ -34,6 +34,15 @@ cat_video_4:
   channel: young_child_channel
   duration: 120
 
+cat_song_video_1:
+  yt_id: 'Meow_Meow_5'
+  title: 'Cat Song'
+  published_at: 2019-01-01
+  description: 'An awesome song about kitties'
+  tags:
+  channel: young_child_song_channel
+  duration: 120
+
 dog_video_1:
   yt_id: 'woof_woof_1'
   title: 'Dog Video'

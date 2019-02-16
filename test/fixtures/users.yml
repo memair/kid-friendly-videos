@@ -1,8 +1,24 @@
 young_child:
-  email: 'young_child@gmail.com'
+  email: 'young_child1@gmail.com'
   encrypted_password: <%= User.new.send(:password_digest, 'password') %>
   interests: ['animals']
   memair_access_token: 1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF
+  functioning_age: 4
+  daily_watch_time: 300
+
+young_child_that_links_songs:
+  email: 'young_child2@gmail.com'
+  encrypted_password: <%= User.new.send(:password_digest, 'password') %>
+  interests: ['songs']
+  memair_access_token: 1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDEE
+  functioning_age: 4
+  daily_watch_time: 300
+
+young_child_with_no_selected_interests:
+  email: 'young_child3@gmail.com'
+  encrypted_password: <%= User.new.send(:password_digest, 'password') %>
+  interests: []
+  memair_access_token: 1234567890ABCDEF1234567890ABCDEF1234567890ABCDEF1234567890ABCDED
   functioning_age: 4
   daily_watch_time: 300
 
