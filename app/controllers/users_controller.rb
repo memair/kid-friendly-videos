@@ -13,13 +13,13 @@ class UsersController < ApplicationController
   end
 
   def watch_time
-    watch_time = params[:watch_time].to_i
-    errors.add(:yt_id, "Please select a longer time period") if watch_time < 5
-    recommendations = current_user.get_recommendations(watch_time)
+    minutes = params[:watch_time].to_i
+    errors.add(:yt_id, "Please select a longer time period") if minutes < 5
+    recommendations = current_user.get_recommendations(minutes)
 
     mutation = generate_recommendation_mutation(recommendations)
     response = Memair.new(current_user.memair_access_token).query(mutation)
-    flash[:success] = "#{recommendations.count} #{'video'.pluralize(recommendations.count)} added to your Memair play list which will expire in #{watch_time} minutes."
+    flash[:success] = "#{recommendations.count} #{'video'.pluralize(recommendations.count)} added to your Memair play list which will expire in #{minutes} minutes."
     redirect_to(root_path)
   end
 
