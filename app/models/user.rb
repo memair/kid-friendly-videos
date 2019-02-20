@@ -52,13 +52,13 @@ class User < ApplicationRecord
       WITH
       recommendable_channels AS (
         SELECT
-          c.id
+          c.id,
+          CASE WHEN (u.interests ?| TRANSLATE(c.tags::text, '[]','{}')::TEXT[]) THEN 1 ELSE 0 END AS interest_match
         FROM
           users u
           JOIN channels c ON u.functioning_age BETWEEN c.min_age AND c.max_age
         WHERE u.id = #{self.id}
-        GROUP BY c.id
-        ORDER BY ((u.interests ?| TRANSLATE(c.tags::text, '[]','{}')::TEXT[]) OR u.interests = '[]'::jsonb)
+        GROUP BY c.id, u.interests
       ),
       recommendable_videos AS (
         SELECT
@@ -72,7 +72,7 @@ class User < ApplicationRecord
           v.duration < #{ expires_in.nil? ? self.daily_watch_time * 60 / 2 : expires_in * 60 }
           AND v.duration > 0
           #{'AND v.id NOT IN (' + previous_recommended_video_ids.join(",") + ')' unless previous_recommended_video_ids.empty?}
-        ORDER BY RANDOM()
+        ORDER BY c.interest_match, RANDOM()
         LIMIT 50)
       SELECT *
       FROM recommendable_videos
