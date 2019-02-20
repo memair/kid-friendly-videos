@@ -1,4 +1,4 @@
-# README
+# Kid Friendly Videos
 
 ## DB setup
 
