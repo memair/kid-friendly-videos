@@ -64,7 +64,7 @@ class User < ApplicationRecord
         SELECT
           v.id,
           (NOW() + INTERVAL '#{ expires_in || 48 * 60 }' MINUTE)::text AS expires_at,
-          SUM(v.duration) OVER (ORDER BY RANDOM()) AS cumulative_duration
+          SUM(v.duration) OVER (ORDER BY c.interest_match, RANDOM()) AS cumulative_duration
         FROM
           videos v
           JOIN recommendable_channels c ON v.channel_id = c.id
@@ -78,9 +78,7 @@ class User < ApplicationRecord
       FROM recommendable_videos
       WHERE cumulative_duration <= #{ expires_in.nil? ? self.daily_watch_time * 60 : expires_in * 60 }
     """
-    puts "#" * 64
-    puts sql
-    puts "#" * 64
+
     results = ActiveRecord::Base.connection.execute(sql).to_a
     videos = Video.where(id: results.map {|r| r['id']}) # prevent n + 1 query
     expires_at = results.map {|r| r['expires_at']}
