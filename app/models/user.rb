@@ -53,7 +53,7 @@ class User < ApplicationRecord
       recommendable_channels AS (
         SELECT
           c.id,
-          CASE WHEN (u.interests ?| TRANSLATE(c.tags::text, '[]','{}')::TEXT[]) THEN 1 ELSE 0 END AS interest_match
+          CASE WHEN (u.interests ?| TRANSLATE(c.tags::text, '[]','{}')::TEXT[]) THEN 0 ELSE 1 END AS interest_match
         FROM
           users u
           JOIN channels c ON u.functioning_age BETWEEN c.min_age AND c.max_age
@@ -72,13 +72,15 @@ class User < ApplicationRecord
           v.duration < #{ expires_in.nil? ? self.daily_watch_time * 60 / 2 : expires_in * 60 }
           AND v.duration > 0
           #{'AND v.id NOT IN (' + previous_recommended_video_ids.join(",") + ')' unless previous_recommended_video_ids.empty?}
-        ORDER BY c.interest_match DESC, RANDOM()
+        ORDER BY c.interest_match, RANDOM()
         LIMIT 50)
       SELECT *
       FROM recommendable_videos
       WHERE cumulative_duration <= #{ expires_in.nil? ? self.daily_watch_time * 60 : expires_in * 60 }
     """
-
+    puts "#" * 64
+    puts sql
+    puts "#" * 64
     results = ActiveRecord::Base.connection.execute(sql).to_a
     videos = Video.where(id: results.map {|r| r['id']}) # prevent n + 1 query
     expires_at = results.map {|r| r['expires_at']}
