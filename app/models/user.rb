@@ -18,7 +18,8 @@ class User < ApplicationRecord
     'Stories & Riddles',
     'Blogs',
     'News',
-    'Environment & Animals'
+    'Environment & Animals',
+    'Computer Games'
   ]
   ADMINS = %w( greg@gho.st )
 
