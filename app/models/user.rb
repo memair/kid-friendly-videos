@@ -11,7 +11,7 @@ class User < ApplicationRecord
     'Cartoons & Puppets',
     'Songs & Music',
     'Movement & Dance',
-    'Crafts & Makers',
+    'Crafts & Creative',
     'Maths',
     'Education',
     'Reading',
