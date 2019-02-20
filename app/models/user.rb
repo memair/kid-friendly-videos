@@ -5,7 +5,21 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable,
          :omniauthable, omniauth_providers: [:memair]
 
-  INTERESTS = %w(trains songs minecraft animals history science reading puppets movement crafts cartoons riddles food math stories education blog )
+  INTERESTS = [
+    'Trains & Machines',
+    'Science & Technology',
+    'Cartoons & Puppets',
+    'Songs & Music',
+    'Movement & Dance',
+    'Crafts & Makers',
+    'Maths',
+    'Education',
+    'Reading',
+    'Stories & Riddles',
+    'Blogs',
+    'News',
+    'Environment & Animals'
+  ]
   ADMINS = %w( greg@gho.st )
 
   def admin

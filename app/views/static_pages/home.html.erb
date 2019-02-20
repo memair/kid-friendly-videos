@@ -36,7 +36,7 @@
           |
           <% User::INTERESTS.sort.each do |interest| %>
             <%= check_box_tag("user[interests][]", interest, current_user.interests.include?(interest)) %>
-            <%= interest.capitalize %> | 
+            <%= interest %> | 
           <% end %>
         </div>
       </p>
