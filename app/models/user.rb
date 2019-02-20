@@ -55,11 +55,10 @@ class User < ApplicationRecord
           c.id
         FROM
           users u
-          JOIN channels c ON 
-            ((u.interests ?| TRANSLATE(c.tags::text, '[]','{}')::TEXT[]) OR u.interests = '[]'::jsonb)
-            AND u.functioning_age BETWEEN c.min_age AND c.max_age
+          JOIN channels c ON u.functioning_age BETWEEN c.min_age AND c.max_age
         WHERE u.id = #{self.id}
         GROUP BY c.id
+        ORDER BY ((u.interests ?| TRANSLATE(c.tags::text, '[]','{}')::TEXT[]) OR u.interests = '[]'::jsonb)
       ),
       recommendable_videos AS (
         SELECT
