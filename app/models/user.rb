@@ -45,7 +45,7 @@ class User < ApplicationRecord
     user
   end
 
-  def get_recommendations(expires_in=nil)
+  def get_recommendations(expires_in=nil, priority=50)
     previous_recommended_video_ids = Video.where(yt_id: previous_recommended).ids
 
     sql = """
@@ -53,16 +53,20 @@ class User < ApplicationRecord
       recommendable_channels AS (
         SELECT
           c.id,
-          CASE WHEN (u.interests ?| TRANSLATE(c.tags::text, '[]','{}')::TEXT[]) THEN 0 ELSE 1 END AS interest_match
+          CASE WHEN (u.interests ?| TRANSLATE(c.tags::text, '[]','{}')::TEXT[]) THEN 0 ELSE 1 END AS interest_match,
+          c.thumbnail_url
         FROM
           users u
           JOIN channels c ON u.functioning_age BETWEEN c.min_age AND c.max_age
         WHERE u.id = #{self.id}
-        GROUP BY c.id, u.interests
+        GROUP BY c.id, u.interests, c.thumbnail_url
       ),
       recommendable_videos AS (
         SELECT
           v.id,
+          c.thumbnail_url,
+          v.published_at,
+          v.duration,
           (NOW() + INTERVAL '#{ expires_in || 48 * 60 }' MINUTE)::text AS expires_at,
           SUM(v.duration) OVER (ORDER BY c.interest_match, RANDOM()) AS cumulative_duration
         FROM
@@ -81,13 +85,7 @@ class User < ApplicationRecord
 
     results = ActiveRecord::Base.connection.execute(sql).to_a
     videos = Video.where(id: results.map {|r| r['id']}) # prevent n + 1 query
-    expires_at = results.map {|r| r['expires_at']}
-
-    recommendations = []
-    results.count.times do |i|
-      recommendations.append(Recommendation.new(video: videos[i], priority: 50, expires_at: expires_at[i]))
-    end
-    recommendations
+    results.each_with_index.map { |r, idx| Recommendation.new(video: videos[idx], priority: priority, expires_at: r['expires_at'], thumbnail_url: r['thumbnail_url'], published_at: r['published_at'], duration: r['duration']) }
   end
 
   def setup?
