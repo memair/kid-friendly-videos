@@ -72,7 +72,7 @@ class User < ApplicationRecord
           v.duration < #{ expires_in.nil? ? self.daily_watch_time * 60 / 2 : expires_in * 60 }
           AND v.duration > 0
           #{'AND v.id NOT IN (' + previous_recommended_video_ids.join(",") + ')' unless previous_recommended_video_ids.empty?}
-        ORDER BY c.interest_match, RANDOM()
+        ORDER BY c.interest_match DESC, RANDOM()
         LIMIT 50)
       SELECT *
       FROM recommendable_videos
