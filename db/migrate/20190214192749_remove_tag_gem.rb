@@ -1,6 +1,5 @@
 class RemoveTagGem < ActiveRecord::Migration[5.2]
   def change
-    drop_table :gutentag_taggings
-    drop_table :gutentag_tags
+    #do nothing but keep migration timestamp. Necesary for removed tagging gem
   end
 end

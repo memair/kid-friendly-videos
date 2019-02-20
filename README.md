@@ -5,19 +5,19 @@
 ### Dev
 
 ```
-CREATE DATABASE autism_video_recommender_development;
-CREATE USER autism_video_recommender_development WITH PASSWORD 'password';
-ALTER USER autism_video_recommender_development WITH SUPERUSER;
-GRANT ALL PRIVILEGES ON DATABASE "autism_video_recommender_development" to autism_video_recommender_development;
+CREATE DATABASE kid_friendly_videos_development;
+CREATE USER kid_friendly_videos_development WITH PASSWORD 'password';
+ALTER USER kid_friendly_videos_development WITH SUPERUSER;
+GRANT ALL PRIVILEGES ON DATABASE "kid_friendly_videos_development" to kid_friendly_videos_development;
 ```
 
 ### Test
 
 ```
-CREATE DATABASE autism_video_recommender_test;
-CREATE USER autism_video_recommender_test WITH PASSWORD 'password';
-ALTER USER autism_video_recommender_test WITH SUPERUSER;
-GRANT ALL PRIVILEGES ON DATABASE "autism_video_recommender_test" to autism_video_recommender_test;
+CREATE DATABASE kid_friendly_videos_test;
+CREATE USER kid_friendly_videos_test WITH PASSWORD 'password';
+ALTER USER kid_friendly_videos_test WITH SUPERUSER;
+GRANT ALL PRIVILEGES ON DATABASE "kid_friendly_videos_test" to kid_friendly_videos_test;
 ```
 
 ### db restarting

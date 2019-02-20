@@ -1,8 +1,8 @@
 <div class="center jumbotron">
   <center>
-  <h1>Autism Video Recommender</h1>
-  <img src="/autism_video_recommender.jpg" width=<%= user_signed_in? ? "15%" : "25%" %>>
-  <% unless user_signed_in? %><h2>Creates safe recommended videos for viewing in Memair</h2><% end %>
+  <h1>Kid Friendly Videos</h1>
+  <img src="/kid_friendly_videos_temp_logo.png" width=<%= user_signed_in? ? "15%" : "25%" %>>
+  <% unless user_signed_in? %><h2>Creates safe recommended videos for viewing on Memair</h2><% end %>
   <% if user_signed_in? && current_user.setup? %>
     <h3>View your latest recommendations in the <a href="https://memair.com/player">Memair Player</a></h3>
   <% end %>
@@ -45,7 +45,7 @@
   <% end %>
 
   <% if user_signed_in? && current_user.setup? %>
-    <%= button_to "Uninstall this app", registration_path(current_user), data: { confirm: 'Autism Video Recommender will no longer generate recommendations in Memair.', title: 'Are you sure you?' }, method: :delete, class: "btn btn-lg btn-danger" %>
+    <%= button_to "Uninstall this app", registration_path(current_user), data: { confirm: 'Kid Friendly Videos will no longer generate recommendations in Memair.', title: 'Are you sure you?' }, method: :delete, class: "btn btn-lg btn-danger" %>
   <% end %>
   <% unless user_signed_in? %>
     <p><%= button_to "Connect with Memair", user_memair_omniauth_authorize_path, id: "sign_in", class: "btn btn-lg btn-primary" %></p>

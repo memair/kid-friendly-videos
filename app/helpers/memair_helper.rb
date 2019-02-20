@@ -6,7 +6,7 @@ module MemairHelper
       """
         {
           type: video
-          source: \"Autism Video Recommender\"
+          source: \"Kid Friendly Videos\"
           priority: #{recommendation.priority}
           expires_at: \"#{recommendation.expires_at}\"
           url: \"https://youtu.be/#{recommendation.video.yt_id}\"
