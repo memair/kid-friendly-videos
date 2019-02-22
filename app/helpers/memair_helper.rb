@@ -9,12 +9,12 @@ module MemairHelper
           source: \"Kid Friendly Videos\"
           priority: #{recommendation.priority}
           expires_at: \"#{recommendation.expires_at}\"
-          url: \"https://youtu.be/#{recommendation.video.yt_id}\"
-          title: \"#{recommendation.video.title.gsub('"', '\"')}\"
-          description: \"#{recommendation.video.description.gsub('"', '\"')}\"
-          thumbnail_url: \"#{recommendation.video.channel.thumbnail_url}\"
-          duration: #{recommendation.video.duration}
-          published_at: \"#{recommendation.video.published_at}\"
+          url: \"https://youtu.be/#{recommendation.yt_id}\"
+          title: \"#{recommendation.title.gsub('"', '\"')}\"
+          description: \"#{recommendation.description.gsub('"', '\"')}\"
+          thumbnail_url: \"#{recommendation.thumbnail_url}\"
+          duration: #{recommendation.duration}
+          published_at: \"#{recommendation.published_at}\"
         }
       """
     }

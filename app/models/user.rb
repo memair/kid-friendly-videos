@@ -49,17 +49,27 @@ class User < ApplicationRecord
     expires_at = expires_in.nil? ? DateTime.now.utc + 24.hours : DateTime.now.utc + expires_in.minutes
     watch_time = (expires_in.nil? ? self.daily_watch_time : expires_in) * 60
 
-    channel_videos = preferred_channels.joins(:videos).where.not(videos: {id: previous_recommended.ids}) || recommendable_channels.joins(:videos).where.not(videos: {id: previous_recommended.ids})
+    videos = preferred_channels.joins(:videos).where.not(videos: {id: previous_recommended.ids}) || recommendable_channels.joins(:videos).where.not(videos: {id: previous_recommended.ids})
 
-    video_ids = []
+    recommendations = []
     duration = 0
-    channel_videos.select(:'videos.id', :'videos.duration').order("RANDOM()").limit(100).each do |channel_video|
+    videos.select(:yt_id, :'videos.title', :'videos.description', :thumbnail_url, :duration, :published_at).order("RANDOM()").limit(100).each do |video|
       break if duration > watch_time
-      video_ids.append(channel_video.id) unless channel_video.duration = 0
-      duration += channel_video.duration
+      recommendations.append(
+        Recommendation.new(
+          yt_id: video.yt_id,
+          title: video.title,
+          description: video.description,
+          thumbnail_url: video.thumbnail_url,
+          duration: video.duration,
+          published_at: video.published_at,
+          priority: priority,
+          expires_at: expires_at,
+      )
+      duration += video.duration
     end
     
-    Video.where(id: video_ids)
+    recommendations
   end
 
   def setup?
