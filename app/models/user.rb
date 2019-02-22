@@ -53,7 +53,7 @@ class User < ApplicationRecord
 
     recommendations = []
     duration = 0
-    videos.select(:yt_id, :'videos.title', :'videos.description', :thumbnail_url, :duration, :published_at).order("RANDOM()").limit(100).each do |video|
+    videos.select(:'videos.yt_id', :'videos.title', :'videos.description', :thumbnail_url, :duration, :published_at).order("RANDOM()").limit(100).each do |video|
       break if duration > watch_time
       recommendations.append(
         Recommendation.new(
