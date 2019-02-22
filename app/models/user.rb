@@ -78,29 +78,29 @@ class User < ApplicationRecord
     end
   end
 
+  def previous_recommended
+    query = '''
+      query {
+        Recommendations(
+          type: video
+          order: desc
+          order_by: timestamp
+          first: 200
+        ){
+          url
+        }
+      }
+    '''
+    response = Memair.new(self.memair_access_token).query(query)
+    yt_ids = response['data']['Recommendations'].map{|r| youtube_id(r['url'])}.compact.uniq
+    Video.where(yt_id: yt_ids)
+  end
+
   private
     def revoke_token
       user = Memair.new(self.memair_access_token)
       query = 'mutation {RevokeAccessToken{revoked}}'
       user.query(query)
-    end
-
-    def previous_recommended
-      query = '''
-        query {
-          Recommendations(
-            type: video
-            order: desc
-            order_by: timestamp
-            first: 200
-          ){
-            url
-          }
-        }
-      '''
-      response = Memair.new(self.memair_access_token).query(query)
-      yt_ids = response['data']['Recommendations'].map{|r| youtube_id(r['url'])}.compact.uniq
-      Video.where(yt_id: yt_ids)
     end
 
     def previous_ignored
