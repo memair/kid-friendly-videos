@@ -45,18 +45,18 @@ class User < ApplicationRecord
     user
   end
 
-  def get_recommendations(expires_in=nil, priority=50)
+  def get_recommendations(expires_in: nil, priority: 50)
+    expires_at = expires_in.nil? ? DateTime.now.utc + 24.hours : DateTime.now.utc + expires_in.minutes
+    watch_time = (expires_in.nil? ? self.daily_watch_time : expires_in) * 60
+
     videos = preferred_channels.joins(:videos).where.not(videos: {id: previous_recommended.ids}) || recommendable_channels.joins(:videos).where.not(videos: {id: previous_recommended.ids})
 
     recommendations = []
     duration = 0
     videos.each do |video|
-      if duration > (self.daily_watch_time * 60)
-        recommendations.append(Recommendation.new(video: video, priority: priority, expires_at: DateTime.now.utc + 24.hours))
-        duration += video.duration
-      else
-        break
-      end
+      break if duration > watch_time
+      recommendations.append(Recommendation.new(video: video, priority: priority, expires_at: expires_at))
+      duration += video.duration
     end
     
     recommendations
@@ -65,24 +65,24 @@ class User < ApplicationRecord
   def setup?
     !self.functioning_age.nil? && !self.daily_watch_time.nil?
   end
-  
+
+  def recommendable_channels
+    Channel.where("#{self.functioning_age} BETWEEN min_age AND max_age")
+  end
+
+  def preferred_channels
+    if self.interests.empty?
+      recommendable_channels
+    else
+      recommendable_channels.where("'#{self.interests}'::JSONB ?| TRANSLATE(channels.tags::TEXT, '[]','{}')::TEXT[]")
+    end
+  end
+
   private
     def revoke_token
       user = Memair.new(self.memair_access_token)
       query = 'mutation {RevokeAccessToken{revoked}}'
       user.query(query)
-    end
-
-    def recommendable_channels
-      Channel.where("#{self.functioning_age} BETWEEN min_age AND max_age")
-    end
-  
-    def preferred_channels
-      if self.interests.empty?
-        recommendable_channels
-      else
-        recommendable_channels.where("'#{self.interests}'::JSONB ?| TRANSLATE(channels.tags::TEXT, '[]','{}')::TEXT[]")
-      end
     end
 
     def previous_recommended
