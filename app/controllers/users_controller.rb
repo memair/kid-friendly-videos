@@ -15,7 +15,7 @@ class UsersController < ApplicationController
   def watch_time
     minutes = params[:watch_time].to_i
     errors.add(:yt_id, "Please select a longer time period") if minutes < 5
-    recommendations = current_user.get_recommendations(expires_in: minutes)
+    recommendations = current_user.get_recommendations(expires_in: minutes, priority: 95)
 
     mutation = generate_recommendation_mutation(recommendations)
     response = Memair.new(current_user.memair_access_token).query(mutation)

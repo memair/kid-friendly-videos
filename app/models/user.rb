@@ -47,14 +47,16 @@ class User < ApplicationRecord
 
   def get_recommendations(expires_in: nil, priority: 50)
     expires_at = expires_in.nil? ? DateTime.now.utc + 24.hours : DateTime.now.utc + expires_in.minutes
-    watch_time = (expires_in.nil? ? self.daily_watch_time : expires_in) * 60
+    watch_time_seconds = (expires_in.nil? ? self.daily_watch_time : expires_in) * 60
 
     videos = preferred_channels.joins(:videos).where.not(videos: {id: previous_recommended.ids}) || recommendable_channels.joins(:videos).where.not(videos: {id: previous_recommended.ids})
+    videos = videos.where("videos.duration < ?", watch_time_seconds)
 
     recommendations = []
     duration = 0
+
     videos.select(:'videos.yt_id', :'videos.title', :'videos.description', :thumbnail_url, :duration, :published_at).order("RANDOM()").limit(100).each do |video|
-      break if duration > watch_time
+      break if duration > watch_time_seconds
       recommendations.append(
         Recommendation.new(
           yt_id: video.yt_id,
