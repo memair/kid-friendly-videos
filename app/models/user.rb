@@ -49,17 +49,17 @@ class User < ApplicationRecord
     expires_at = expires_in.nil? ? DateTime.now.utc + 24.hours : DateTime.now.utc + expires_in.minutes
     watch_time = (expires_in.nil? ? self.daily_watch_time : expires_in) * 60
 
-    videos = preferred_channels.joins(:videos).where.not(videos: {id: previous_recommended.ids}) || recommendable_channels.joins(:videos).where.not(videos: {id: previous_recommended.ids})
+    channel_videos = preferred_channels.joins(:videos).where.not(videos: {id: previous_recommended.ids}) || recommendable_channels.joins(:videos).where.not(videos: {id: previous_recommended.ids})
 
-    recommendations = []
+    video_ids = []
     duration = 0
-    videos.each do |video|
+    channel_videos.select(:'videos.id', :'videos.duration').each do |channel_video|
       break if duration > watch_time
-      recommendations.append(Recommendation.new(video: video, priority: priority, expires_at: expires_at))
-      duration += video.duration
+      video_ids.append(channel_video.id) unless channel_video.duration = 0
+      duration += channel_video.duration
     end
     
-    recommendations
+    Video.where(id: video_ids)
   end
 
   def setup?
