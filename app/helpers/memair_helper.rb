@@ -12,7 +12,7 @@ module MemairHelper
           url: \"https://youtu.be/#{recommendation.video.yt_id}\"
           title: \"#{recommendation.video.title.gsub('"', '\"')}\"
           description: \"#{recommendation.video.description.gsub('"', '\"')}\"
-          thumbnail_url: \"#{recommendation.video.channelthumbnail_url}\"
+          thumbnail_url: \"#{recommendation.video.channel.thumbnail_url}\"
           duration: #{recommendation.video.duration}
           published_at: \"#{recommendation.video.published_at}\"
         }

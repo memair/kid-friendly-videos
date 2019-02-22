@@ -53,7 +53,7 @@ class User < ApplicationRecord
 
     video_ids = []
     duration = 0
-    channel_videos.select(:'videos.id', :'videos.duration').each do |channel_video|
+    channel_videos.select(:'videos.id', :'videos.duration').order("RANDOM()").limit(100).each do |channel_video|
       break if duration > watch_time
       video_ids.append(channel_video.id) unless channel_video.duration = 0
       duration += channel_video.duration
