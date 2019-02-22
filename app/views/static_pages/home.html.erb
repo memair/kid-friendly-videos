@@ -3,22 +3,24 @@
   <h1>Kid Friendly Videos</h1>
   <img src="/kid_friendly_videos_temp_logo.png" width=<%= user_signed_in? ? "15%" : "25%" %>>
   <% unless user_signed_in? %><h2>Creates safe recommended videos for viewing on Memair</h2><% end %>
-  <% if user_signed_in? && current_user.setup? %>
-   <p> <%= link_to "Launch Player", 'https://memair.com/player', class: "btn btn-lg btn-primary" %></p>
-  <% end %>
 
   <% flash.each do |key, value| %>
     <div class="<%= flash_class(key) %>">
       <%= value %>
     </div>
   <% end %>
+ 
+  <% if user_signed_in? && current_user.setup? %>
+    <p> <%= link_to "Launch Player", 'https://memair.com/player', class: "btn btn-lg btn-primary" %></p>
+  <% end %>
+
   <% if user_signed_in? %>
     <% if current_user.setup? %>
       <%= form_tag watch_time_path, method: :post do |f| %>
         <%= number_field_tag(:watch_time, value = 8, options = {min: 5, max: 240, hidden: true}) %>
         <%= number_field_tag(:expires_in, value = 10, options = {hidden: true}) %>
         <%= submit_tag 'Add 10 minute reward', class: 'btn btn-lg btn-success'  %><br>
-        <i>Note: this will 8 - 15 minutes of video recommendations</i> 
+        <i>Note: this will around 10 minutes of video recommendations</i> 
       <% end %>
     <% end %>
 
