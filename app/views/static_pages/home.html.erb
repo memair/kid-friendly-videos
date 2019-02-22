@@ -16,7 +16,7 @@
     <% if current_user.setup? %>
       <%= form_tag watch_time_path, method: :post do |f| %>
         <%= number_field_tag(:watch_time, value = 8, options = {min: 5, max: 240, hidden: true}) %>
-        <%= number_field_tag(:expires_in, value = 10) %>
+        <%= number_field_tag(:expires_in, value = 10, options = {hidden: true}) %>
         <%= submit_tag 'Add 10 minute reward', class: 'btn btn-lg btn-success'  %><br>
         <i>Note: this will 8 - 15 minutes of video recommendations</i> 
       <% end %>

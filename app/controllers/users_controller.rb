@@ -21,7 +21,7 @@ class UsersController < ApplicationController
 
     mutation = generate_recommendation_mutation(recommendations)
     response = Memair.new(current_user.memair_access_token).query(mutation)
-    flash[:success] = "#{recommendations.count} #{'video'.pluralize(recommendations.count)} added to your Memair play list which will expire in #{minutes} minutes."
+    flash[:success] = "#{recommendations.count} #{'video'.pluralize(recommendations.count)} added to your Memair play list which will expire in #{params[:expires_in]} minutes."
     redirect_to(root_path)
   end
 
