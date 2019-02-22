@@ -64,7 +64,8 @@ class User < ApplicationRecord
           duration: video.duration,
           published_at: video.published_at,
           priority: priority,
-          expires_at: expires_at,
+          expires_at: expires_at
+        )
       )
       duration += video.duration
     end

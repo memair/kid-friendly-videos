@@ -1,7 +1,6 @@
 module MemairHelper
 
   def generate_recommendation_mutation(recommendations)
-    raise TypeError, 'generate_recommendation_query expects an array of vidoes' unless recommendations.kind_of?(Array) && !recommendations.empty? && (recommendations.all? {|vid| vid.kind_of?(Recommendation)})
     recommendation_strings = recommendations.map { |recommendation|
       """
         {
