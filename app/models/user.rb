@@ -46,46 +46,20 @@ class User < ApplicationRecord
   end
 
   def get_recommendations(expires_in=nil, priority=50)
-    previous_recommended_video_ids = Video.where(yt_id: previous_recommended).ids
+    videos = preferred_channels.joins(:videos).where.not(videos: {id: previous_recommended.ids}) || recommendable_channels.joins(:videos).where.not(videos: {id: previous_recommended.ids})
 
-    sql = """
-      WITH
-      recommendable_channels AS (
-        SELECT
-          c.id,
-          CASE WHEN (u.interests ?| TRANSLATE(c.tags::text, '[]','{}')::TEXT[]) THEN 0 ELSE 1 END AS interest_match,
-          c.thumbnail_url
-        FROM
-          users u
-          JOIN channels c ON u.functioning_age BETWEEN c.min_age AND c.max_age
-        WHERE u.id = #{self.id}
-        GROUP BY c.id, u.interests, c.thumbnail_url
-      ),
-      recommendable_videos AS (
-        SELECT
-          v.id,
-          c.thumbnail_url,
-          v.published_at,
-          v.duration,
-          (NOW() + INTERVAL '#{ expires_in || 48 * 60 }' MINUTE)::text AS expires_at,
-          SUM(v.duration) OVER (ORDER BY c.interest_match, RANDOM()) AS cumulative_duration
-        FROM
-          videos v
-          JOIN recommendable_channels c ON v.channel_id = c.id
-        WHERE
-          v.duration < #{ expires_in.nil? ? self.daily_watch_time * 60 / 2 : expires_in * 60 }
-          AND v.duration > 0
-          #{'AND v.id NOT IN (' + previous_recommended_video_ids.join(",") + ')' unless previous_recommended_video_ids.empty?}
-        ORDER BY c.interest_match, RANDOM()
-        LIMIT 50)
-      SELECT *
-      FROM recommendable_videos
-      WHERE cumulative_duration <= #{ expires_in.nil? ? self.daily_watch_time * 60 : expires_in * 60 }
-    """
-
-    results = ActiveRecord::Base.connection.execute(sql).to_a
-    videos = Video.where(id: results.map {|r| r['id']}) # prevent n + 1 query
-    results.each_with_index.map { |r, idx| Recommendation.new(video: videos[idx], priority: priority, expires_at: r['expires_at'], thumbnail_url: r['thumbnail_url'], published_at: r['published_at'], duration: r['duration']) }
+    recommendations = []
+    duration = 0
+    videos.each do |video|
+      if duration > (self.daily_watch_time * 60)
+        recommendations.append(Recommendation.new(video: video, priority: priority, expires_at: DateTime.now.utc + 24.hours))
+        duration += video.duration
+      else
+        break
+      end
+    end
+    
+    recommendations
   end
 
   def setup?
@@ -99,13 +73,53 @@ class User < ApplicationRecord
       user.query(query)
     end
 
+    def recommendable_channels
+      Channel.where("#{self.functioning_age} BETWEEN min_age AND max_age")
+    end
+  
+    def preferred_channels
+      if self.interests.empty?
+        recommendable_channels
+      else
+        recommendable_channels.where("'#{self.interests}'::JSONB ?| TRANSLATE(channels.tags::TEXT, '[]','{}')::TEXT[]")
+      end
+    end
+
     def previous_recommended
       query = '''
-        query{
-          recommended: Recommendations(first: 10000 actioned: true order: desc order_by: timestamp){url}
-        }'''
+        query {
+          Recommendations(
+            type: video
+            order: desc
+            order_by: timestamp
+            first: 200
+          ){
+            url
+          }
+        }
+      '''
       response = Memair.new(self.memair_access_token).query(query)
-      response['data']['recommended'].map{|r| youtube_id(r['url'])}.compact.uniq
+      yt_ids = response['data']['Recommendations'].map{|r| youtube_id(r['url'])}.compact.uniq
+      Video.where(yt_id: yt_ids)
+    end
+
+    def previous_ignored
+      query = '''
+        query {
+          Recommendations(
+            type: video
+            ignored:true
+            order: desc
+            order_by: timestamp
+            first: 100
+          ){
+            url
+          }
+        }
+       '''
+      response = Memair.new(self.memair_access_token).query(query)
+      yt_ids = response['data']['Recommendations'].map{|r| youtube_id(r['url'])}.compact.uniq
+      Video.where(yt_id: yt_ids)
     end
 
     def youtube_id(url)
