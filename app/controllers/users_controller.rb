@@ -9,7 +9,7 @@ class UsersController < ApplicationController
     if current_user.update_attributes(user_params)
       if completing_signup
         recommendations = current_user.get_recommendations(
-          expires_in: 48 * 60,
+          expires_in: 25 * 60,
           watch_time: current_user.daily_watch_time,
           priority: 50
         )
