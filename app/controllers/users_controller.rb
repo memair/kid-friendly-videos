@@ -4,8 +4,22 @@ class UsersController < ApplicationController
   before_action :authenticate_user!
 
   def update
+    completing_signup = current_user.functioning_age.nil? && current_user.daily_watch_time.nil?
+
     if current_user.update_attributes(user_params)
-      flash[:success] = "Settings have being saved, recommendations will start appearing on Memair shortly. Click the `Add 10 minute reward` button to add some temporary recommendations."
+      if completing_signup
+        recommendations = current_user.get_recommendations(
+          expires_in: 24 * 60,
+          watch_time: current_user.daily_watch_time,
+          priority: 50
+        )
+        mutation = generate_recommendation_mutation(recommendations)
+        Memair.new(current_user.memair_access_token).query(mutation)
+        current_user.update(last_recommended_at: DateTime.now)
+        flash[:success] = "Setup is complete, Launch Player to see your first recommendations. Return to this app to update your preferences or to add reward recommendations"
+      else
+        flash[:success] = "Settings have being saved, updated recommendations will start appearing on Memair shortly"
+      end
     else
       flash[:error] = 'Something went wrong'
     end
