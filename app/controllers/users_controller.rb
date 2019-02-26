@@ -16,7 +16,7 @@ class UsersController < ApplicationController
         mutation = generate_recommendation_mutation(recommendations)
         Memair.new(current_user.memair_access_token).query(mutation)
         current_user.update(last_recommended_at: DateTime.now)
-        flash[:success] = "Setup is complete, Launch Player to see your first recommendations. #{current_user.watch_time} minutes of videos will be added to Memair player every 24 hours. Return to this app to update your preferences or to add additional reward recommendations"
+        flash[:success] = "Setup is complete, Launch Player to see your first recommendations. #{current_user.daily_watch_time} minutes of videos will be added to Memair player every 24 hours. Return to this app to update your preferences or to add additional reward recommendations"
       else
         flash[:success] = "Settings have being saved, updated recommendations will start appearing on Memair shortly"
       end
