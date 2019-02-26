@@ -1,8 +1,8 @@
-<div class="center jumbotron">
+<div class="center jumbotron" style="padding-top: 10px;">
   <center>
   <h1>Kid Friendly Videos</h1>
   <img src="/kid_friendly_videos_temp_logo.png" width=<%= user_signed_in? ? "15%" : "25%" %>>
-  <% unless user_signed_in? %><h2>Creates safe recommended videos for viewing on Memair</h2><% end %>
+  <% unless user_signed_in? %><h2>Creates safe recommended videos for viewing on Memair</h2><% else %><p><% end %>
 
   <% flash.each do |key, value| %>
     <div class="<%= flash_class(key) %>">
@@ -20,7 +20,8 @@
         <%= number_field_tag(:watch_time, value = 8, options = {min: 5, max: 240, hidden: true}) %>
         <%= number_field_tag(:expires_in, value = 10, options = {hidden: true}) %>
         <%= submit_tag 'Add 10 minute reward', class: 'btn btn-lg btn-success'  %><br>
-        <i>Note: this will around 10 minutes of video recommendations</i> 
+        <i>Note: this will around 10 minutes of video recommendations</i>
+        <p>
       <% end %>
     <% end %>
 

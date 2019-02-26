@@ -5,7 +5,7 @@ class UsersController < ApplicationController
 
   def update
     if current_user.update_attributes(user_params)
-      flash[:success] = 'Settings have being saved'
+      flash[:success] = "Settings have being saved, recommendations will start appearing on Memair shortly. Click the `Add 10 minute reward` button to add some temporary recommendations."
     else
       flash[:error] = 'Something went wrong'
     end
@@ -21,7 +21,7 @@ class UsersController < ApplicationController
 
     mutation = generate_recommendation_mutation(recommendations)
     response = Memair.new(current_user.memair_access_token).query(mutation)
-    flash[:success] = "#{recommendations.count} #{'video'.pluralize(recommendations.count)} added to your Memair play list which will expire in #{params[:expires_in]} minutes."
+    flash[:success] = "#{recommendations.count} #{'video'.pluralize(recommendations.count)} added to Memair player which will expire in #{params[:expires_in]} minutes. Click Launch Player below to enjoy them!"
     redirect_to(root_path)
   end
 
