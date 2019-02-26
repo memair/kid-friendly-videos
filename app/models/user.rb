@@ -46,7 +46,7 @@ class User < ApplicationRecord
   end
 
   def get_recommendations(expires_in: nil, watch_time: self.daily_watch_time, priority: 50)
-    expires_at = expires_in.nil? ? DateTime.now.utc + 24.hours : DateTime.now.utc + expires_in.minutes
+    expires_at = expires_in.nil? ? DateTime.now.utc + 48.hours : DateTime.now.utc + expires_in.minutes
 
     videos = preferred_channels.joins(:videos).where.not(videos: {id: previous_recommended.ids}) || recommendable_channels.joins(:videos).where.not(videos: {id: previous_recommended.ids})
     videos = videos.where("videos.duration < ?", watch_time * 60)
