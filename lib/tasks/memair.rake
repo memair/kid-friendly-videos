@@ -7,7 +7,7 @@ namespace :memair do
     puts "started at #{DateTime.now}"
 
     user = User.
-      where('last_recommended_at IS NULL OR last_recommended_at < ?', 24.seconds.ago).
+      where('last_recommended_at IS NULL OR last_recommended_at < ?', 24.hours.ago).
       where.not(functioning_age: nil).
       where.not(daily_watch_time: nil).
       order('last_recommended_at ASC NULLS FIRST').
