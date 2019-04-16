@@ -12,7 +12,7 @@ class Channel < ApplicationRecord
   has_many :videos, dependent: :delete_all
 
   def get_videos
-    yt_channel.videos.each do |yt_video|
+    yt_channel.videos.where(published_after: latest_published_at, published_before: DateTime.now.utc.iso8601(0)).each do |yt_video|
       begin
         if yt_video.duration.to_i > 0
           self.videos.where(yt_id: yt_video.id).first_or_create do |video|
@@ -41,6 +41,14 @@ class Channel < ApplicationRecord
   private
     def yt_channel
       @yt_channel = @yt_channel || (Yt::Channel.new id: self.yt_id)
+    end
+
+    def latest_published_at
+      if self.videos.empty?
+        DateTime.new(2005, 2, 14)
+      else
+        self.videos.maximum(:published_at).iso8601(0)
+      end
     end
 
     def set_details_if_nil
