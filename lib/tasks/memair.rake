@@ -19,7 +19,7 @@ namespace :memair do
       if recommendations
         mutation = generate_recommendation_mutation(recommendations)
         response = Memair.new(user.memair_access_token).query(mutation)
-        puts "Bulk Create: #{response['data']['BulkCreate']['id']}"
+        puts "Bulk Create: #{response['data']['Create']['id']}"
       else
         puts "no recommendations for user"
       end
