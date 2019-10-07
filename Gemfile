@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.5.1'
+ruby '2.6.3'
 
 gem 'rails',        '~> 5.2.2'
 gem 'pg',           '>= 0.18', '< 2.0'
@@ -19,9 +19,9 @@ gem 'jquery-rails',        '~> 4.3'
 gem 'jquery-ui-rails',     '~> 6.0'
 
 gem 'devise',                 '~> 4.5'
-gem 'omniauth-memair',        '0.0.3'
+gem 'omniauth-memair',        '0.0.5'
 
-gem 'memair', '~> 0.1.1'
+gem 'memair', '~> 0.1.2'
 gem 'yt',     '~> 0.32.2'
 
 group :development, :test do
